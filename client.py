@@ -1,12 +1,20 @@
+import os
+from os import mkdir
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from anthropic import Anthropic
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+os.makedirs(MEDIA_DIR, exist_ok=True)
 
 def get_haiku():
-    return "claude-haiku-4-5-20251001"
+    return "claude-haiku-4-5"
 
 
 def get_anthropic_client():
@@ -33,8 +41,12 @@ def get_params(messages):
     return params
 
 
-def chat(messages, system=None):
+def chat(messages, system=None, temperature=1.0, stop_sequences=None):
+    if stop_sequences is None:
+        stop_sequences = []
     params = get_params(messages)
+    params['temperature'] = temperature
+    params['stop_sequences'] = stop_sequences
     if system:
         params["system"] = system
     message = get_anthropic_client().messages.create(**params)
@@ -50,3 +62,6 @@ def stream_basic(messages):
 def stream(messages):
     params = get_params(messages)
     return get_anthropic_client().messages.stream(**params)
+
+def get_media_dir():
+    return MEDIA_DIR
