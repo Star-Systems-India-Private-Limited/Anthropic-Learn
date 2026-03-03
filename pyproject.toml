@@ -8,4 +8,5 @@ dependencies = [
     "anthropic>=0.76.0",
     "ipykernel>=7.1.0",
     "python-dotenv>=1.2.1",
+    "voyageai>=0.3.7",
 ]
